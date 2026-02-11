@@ -1,0 +1,14 @@
+digraph G {
+	Node20034f06c30[style = "filled", fillcolor = "#b141d3", label = "root"];
+	Node20034f06d10[style = "filled", fillcolor = "#e3e029", label = "a"];
+	Node20034f06df0[style = "filled", fillcolor = "#e3e029", label = "ab"];
+	Node20034f06ed0[style = "filled", fillcolor = "#06c78a", label = "abc | 12"];
+	Node20034f06df0->Node20034f06ed0[color = "#662491", label = " c"]	Node20034f01260[style = "filled", fillcolor = "#06c78a", label = "abd | 3"];
+	Node20034f06df0->Node20034f01260[color = "#662491", label = " d"]	Node20034f06d10->Node20034f06df0[color = "#662491", label = " b"]	Node20034f06c30->Node20034f06d10[color = "#662491", label = " a"]	Node20034f01340[style = "filled", fillcolor = "#e3e029", label = "b"];
+	Node20034f01420[style = "filled", fillcolor = "#e3e029", label = "ba"];
+	Node20034f01500[style = "filled", fillcolor = "#e3e029", label = "bab"];
+	Node20034f015e0[style = "filled", fillcolor = "#06c78a", label = "baby | -8"];
+	Node20034f01500->Node20034f015e0[color = "#662491", label = " y"]	Node20034f01420->Node20034f01500[color = "#662491", label = " b"]	Node20034f016c0[style = "filled", fillcolor = "#06c78a", label = "bad | 152"];
+	Node20034f01420->Node20034f016c0[color = "#662491", label = " d"]	Node20034f01340->Node20034f01420[color = "#662491", label = " a"]	Node20034f06c30->Node20034f01340[color = "#662491", label = " b"]	Node20034f017a0[style = "filled", fillcolor = "#e3e029", label = "c"];
+	Node20034f01880[style = "filled", fillcolor = "#06c78a", label = "ca | 152"];
+	Node20034f017a0->Node20034f01880[color = "#662491", label = " a"]	Node20034f06c30->Node20034f017a0[color = "#662491", label = " c"]}

@@ -22,16 +22,23 @@ BorError_t BorImgDump(Bor_t* bor) {
 
 #define ull unsigned long long
 
+extern const int MAX_DEEP;
+char dump_str[MAX_DEEP];
+
 BorError_t NodeImgDump(Node_t* node, FILE* dot_file) { // todo: node_string in every node
+    static int deep = 0;
     fprintf(dot_file, "\tNode%llx[", (ull)node);
     fprintf(dot_file, "style = \"filled\", ");
+    //fprintf(dot_file, "shape = \"record\", ");
     if (node->val != -1) {
         fprintf(dot_file, "fillcolor = \"#06c78a\", ");
-        fprintf(dot_file, "label = %d", node->val);
+        fprintf(dot_file, "label = \"%s | %d\"", dump_str, node->val);
+    } else if (deep == 0) {
+        fprintf(dot_file, "fillcolor = \"#b141d3\", ");
+        fprintf(dot_file, "label = \"root\"");
     } else { 
-        fprintf(dot_file, "shape = circle, "); 
         fprintf(dot_file, "fillcolor = \"#e3e029\", ");
-        fprintf(dot_file, "label = \"\"");
+        fprintf(dot_file, "label = \"%s\"", dump_str);
     }
     fprintf(dot_file, "];\n");
 
@@ -39,7 +46,11 @@ BorError_t NodeImgDump(Node_t* node, FILE* dot_file) { // todo: node_string in e
 
     for (int i = 0; i < ALPH_SIZE; ++i) {
         if (node->nxt[i]) {
+            dump_str[deep] = ('a' + i);
+            ++deep;
             error_code = NodeImgDump(node->nxt[i], dot_file);
+            --deep;
+            dump_str[deep] = '\0';
             if (error_code != OK)
                 return error_code;
 
