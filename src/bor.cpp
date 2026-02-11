@@ -1,5 +1,7 @@
 #include "bor.h"
 
+static int CheckLen(char* str);
+
 Bor_t* BorCtor() {
     Bor_t* bor = (Bor_t*)calloc(1, sizeof(Bor_t));
 
@@ -110,7 +112,7 @@ int GetValueNode(Node_t* node, char* str) {
         return -1;
 
     while (*str != '\0') {
-        int ind = (*str - 'a')
+        int ind = (*str - 'a');
         if (ind >= ALPH_SIZE || !node->nxt[ind])
             return -1;
 
