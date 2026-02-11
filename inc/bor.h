@@ -1,4 +1,8 @@
+#ifndef _BOR_H_
+#define _BOR_H_
+
 #include "errors.h"
+#include <cstdlib>
 
 const int ALPH_SIZE =   26;
 const int MAX_DEEP  = 1000;
@@ -25,3 +29,4 @@ BorError_t UpdateNode(Node_t* node, char* str, int x);
 int GetValueBor(Bor_t* bor, char* str);
 int GetValueNode(Node_t* node, char* str);
 
+#endif

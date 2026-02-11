@@ -1,3 +1,6 @@
+#ifndef _ERRORS_H_
+#define _ERRORS_H_
+
 #include <stdio.h>
 
 #define RESET_COLOR  "\033[0m"
@@ -19,3 +22,5 @@ enum BorError_t {
 };
 
 void ParseBorError(BorError_t err);
+
+#endif
