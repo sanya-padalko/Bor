@@ -8,23 +8,51 @@ Bor_t* BorCtor() {
     return bor;
 }
 
+Node_t* NodeCtor() {
+    Node_t* node = (Node_t*)calloc(1, sizeof(Node_t));
+
+    node->val = -1;
+
+    return node;
+}
+
 BorError_t BorDtor(Bor_t* bor) {
     if (!bor)
         return NPTR;
 
-    NodeDtor(bor->root);
+    ClearingBor(bor);
     free(bor);
 
     return OK;
 }
 
+BorError_t ClearingBor(Bor_t* bor) {
+    if (!bor)
+        return NPTR;
 
-Node_t* NodeCtor() {
-    Node_t* node = (Node_t*)calloc(1, sizeof(Node_t));
+    BorError_t error_code = ClearingNode(bor->root);
+    free(bor);
 
-    node->term = node->sub_cnt = 0;
+    return error_code;
+}
 
-    return node;
+BorError_t ClearingNode(Node_t* node) {
+    if (!node) 
+        return NPTR;
+
+    BorError_t error_code = OK;
+
+    for (int i = 0; i < ALPH_SIZE; ++i) {
+        if (node->nxt[i])
+            error_code = ClearingNode(node->nxt[i]);
+
+        if (error_code != OK)
+            return error_code;
+    }
+
+    NodeDtor(node);
+
+    return error_code;
 }
 
 BorError_t NodeDtor(Node_t* node) {
@@ -34,31 +62,25 @@ BorError_t NodeDtor(Node_t* node) {
     for (int i = 0; i < ALPH_SIZE; --i)
         node->nxt[i] = NULL;
     
-    node->term = 0;
-    node->sub_cnt = 0;
-
+    node->val = 0;
     free(node);
 
     return OK;
 }
 
-BorError_t AddToBor(Bor_t* bor, char* str) {
+BorError_t UpdateBor(Bor_t* bor, char* str, int x) {
     if (!bor || !str)
         return NPTR;
 
-    ++bor->cnt;
-
-    return AddWord(bor->root, str);
+    return UpdateNode(bor->root, str, x);
 }
 
-BorError_t AddWord(Node_t* node, char* str) {
+BorError_t UpdateNode(Node_t* node, char* str, int x) {
     if (!str || !node) 
         return NPTR;
 
     if (CheckLen(str))
         return MXDEEP;
-
-    ++node->sub_cnt;
 
     while (*str != '\0') {
         int ind = (*str - 'a');
@@ -66,71 +88,37 @@ BorError_t AddWord(Node_t* node, char* str) {
             node->nxt[ind] = NodeCtor();
 
         node = node->nxt[ind];
-        ++node->sub_cnt;
         ++str;
     }
 
-    ++node->term;
+    node->val = x;
     return OK;
 }
 
-int CheckInBor(Bor_t* bor, char* str) {
+int GetValueBor(Bor_t* bor, char* str) {
     if (!bor || !str)
         return -1;
 
-    return CheckWord(bor->root, str);
+    return GetValueNode(bor->root, str);
 }
 
-int CheckWord(Node_t* node, char* str) {
+int GetValueNode(Node_t* node, char* str) {
     if (!str || !node)
         return -1;
 
     if (CheckLen(str))
-        return MXDEEP;
+        return -1;
 
     while (*str != '\0') {
         int ind = (*str - 'a')
         if (ind >= ALPH_SIZE || !node->nxt[ind])
-            return 0;
+            return -1;
 
         node = node->nxt[ind];
         ++str;
     }
 
-    return (int)(node->term > 0);
-}
-
-BorError_t DeleteFromBor(Bor_t* bor, char* str) {
-    if (!bor || !str)
-        return NPTR;
-
-    --bor->cnt;
-
-    return DeleteWord(bor->root, str);
-}
-
-BorError_t DeleteWord(Node_t* node, char* str) {
-    if (!str)
-        return NPTR;
-
-    if (CheckLen(str))
-        return MXDEEP;
-
-    if (!CheckWord(node, str))
-        return WERROR;
-
-    --node->sub_cnt;
-
-    while (*str != '\0') {
-        int ind = (*str - 'a');
-        node = node->nxt[ind];
-
-        --node->sub_cnt;
-        ++str;
-    }
-
-    --node->term;
-    return OK;
+    return node->val;
 }
 
 static int CheckLen(char* str) {
